@@ -5,6 +5,7 @@ import {
   IResponse,
   IResponseMessage,
 } from "../utils/types/interface/IResponse.interface";
+import { ResponseDto, ResponseMessageWrapper } from "../dto/response.dto";
 
 export class UserController {
   constructor(private readonly userService: IUserService) {}
@@ -14,20 +15,20 @@ export class UserController {
       const newUser: User = new User(req.body);
       const createdUser: User = this.userService.createUser(newUser);
 
-      const response: IResponse<User> = {
-        code: 201,
-        status: true,
-        message: "User created successfully",
-        data: createdUser,
-      };
+      const response: ResponseDto<User> = new ResponseDto<User>(
+        201,
+        true,
+        "User created successfully",
+        createdUser
+      );
 
       res.status(201).send(response);
     } catch (error) {
-      const response: IResponseMessage = {
-        code: 400,
-        status: false,
-        message: (error as Error).message,
-      };
+      const response: ResponseMessageWrapper = new ResponseMessageWrapper(
+        400,
+        false,
+        (error as Error).message
+      );
 
       res.status(400).send(response);
     }

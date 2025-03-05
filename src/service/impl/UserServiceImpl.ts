@@ -21,4 +21,38 @@ export class UserServiceImpl implements IUserService {
   public getAllUser(): User[] {
     return users.reverse();
   }
+
+  public getUserById(id: number): User {
+    const user: User = users.find((u: User) => u.getId() === id)!;
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  }
+
+  public updateUser(id: number, user: User): User {
+    const index: number = users.findIndex((u: User) => u.getId() === id);
+
+    if (index === -1) {
+      throw new Error("User not found");
+    }
+
+    user.setId(id);
+
+    users[index] = user;
+
+    return users[index];
+  }
+
+  public deleteUser(id: number): void {
+    const index: number = users.findIndex((u: User) => u.getId() === id);
+
+    if (index === -1) {
+      throw new Error("User not found");
+    }
+
+    users.splice(index, 1);
+  }
 }
